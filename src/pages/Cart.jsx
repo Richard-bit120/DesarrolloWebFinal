@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   Container,
-  Grid,
   Paper,
   Typography,
 } from '@mui/material';
@@ -81,8 +80,18 @@ const Cart = () => {
           </Button>
         </Paper>
       ) : (
-        <Grid container spacing={4}>
-          <Grid item xs={12} md={8}>
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: {
+              xs: '1fr',
+              md: 'minmax(0, 2fr) minmax(0, 1fr)',
+            },
+            gap: 4,
+            alignItems: 'start',
+          }}
+        >
+          <Box>
             {cart.map((item) => (
               <CartItem key={item.id} item={item} />
             ))}
@@ -95,12 +104,12 @@ const Cart = () => {
             >
               Seguir comprando
             </Button>
-          </Grid>
+          </Box>
 
-          <Grid item xs={12} md={4}>
+          <Box>
             <CartSummary onCheckout={handleCheckout} />
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       )}
     </Container>
   );

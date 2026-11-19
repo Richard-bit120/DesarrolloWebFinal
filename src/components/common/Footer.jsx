@@ -1,4 +1,4 @@
-import { Box, Container, Divider, Grid, Link, Typography } from '@mui/material';
+import { Box, Container, Divider, Link, Typography } from '@mui/material';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
@@ -19,9 +19,19 @@ const Footer = () => {
       }}
     >
       <Container maxWidth="lg">
-        <Grid container spacing={4}>
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: {
+              xs: '1fr',
+              sm: 'repeat(2, minmax(0, 1fr))',
+              md: 'repeat(3, minmax(0, 1fr))',
+            },
+            gap: 4,
+          }}
+        >
           {/* Columna 1: Identidad de la tienda */}
-          <Grid item xs={12} md={4}>
+          <Box sx={{ gridColumn: { xs: '1 / -1', md: 'auto' } }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
               <StorefrontIcon color="secondary" />
               <Typography variant="h6" fontWeight={700} color="#ffffff">
@@ -46,10 +56,10 @@ const Footer = () => {
                 </Link>
               ))}
             </Box>
-          </Grid>
+          </Box>
 
           {/* Columna 2: Navegación rápida */}
-          <Grid item xs={12} sm={6} md={4}>
+          <Box>
             <Typography variant="subtitle1" fontWeight={600} color="#ffffff" gutterBottom>
               Navegación
             </Typography>
@@ -85,10 +95,10 @@ const Footer = () => {
                 Contacto
               </Link>
             </Box>
-          </Grid>
+          </Box>
 
           {/* Columna 3: Datos de contacto institucionales */}
-          <Grid item xs={12} sm={6} md={4}>
+          <Box>
             <Typography variant="subtitle1" fontWeight={600} color="#ffffff" gutterBottom>
               Información de Contacto
             </Typography>
@@ -112,8 +122,8 @@ const Footer = () => {
                 </Typography>
               </Box>
             </Box>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
 
         <Divider sx={{ borderColor: 'rgba(255,255,255,0.12)', my: 3 }} />
 

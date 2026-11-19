@@ -1,7 +1,7 @@
 import {
+  Box,
   Button,
   FormControl,
-  Grid,
   InputAdornment,
   InputLabel,
   MenuItem,
@@ -33,8 +33,19 @@ const ProductFilters = ({
         borderRadius: 3,
       }}
     >
-      <Grid container spacing={2} alignItems="center">
-        <Grid item xs={12} md={6}>
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: {
+            xs: '1fr',
+            sm: 'minmax(0, 2fr) minmax(0, 1fr)',
+            md: 'minmax(0, 3fr) minmax(0, 2fr) minmax(0, 1fr)',
+          },
+          gap: 2,
+          alignItems: 'center',
+        }}
+      >
+        <Box sx={{ gridColumn: { xs: '1 / -1', md: 'auto' } }}>
           <TextField
             fullWidth
             size="small"
@@ -50,9 +61,9 @@ const ProductFilters = ({
               ),
             }}
           />
-        </Grid>
+        </Box>
 
-        <Grid item xs={12} sm={8} md={4}>
+        <Box>
           <FormControl fullWidth size="small">
             <InputLabel id="category-filter-label">Categoría</InputLabel>
             <Select
@@ -70,9 +81,9 @@ const ProductFilters = ({
               ))}
             </Select>
           </FormControl>
-        </Grid>
+        </Box>
 
-        <Grid item xs={12} sm={4} md={2}>
+        <Box>
           <Button
             fullWidth
             variant="outlined"
@@ -83,8 +94,8 @@ const ProductFilters = ({
           >
             Limpiar
           </Button>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
     </Paper>
   );
 };

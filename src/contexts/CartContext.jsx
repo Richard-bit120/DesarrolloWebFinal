@@ -1,4 +1,5 @@
 import { createContext, useState, useContext } from 'react';
+import { useUser } from './UserContext';
 
 // Creamos el contexto del carrito
 export const CartContext = createContext();
@@ -13,54 +14,79 @@ export const useCart = () => {
 };
 
 export const CartProvider = ({ children }) => {
-  // Estado principal: arreglo de productos con su propiedad "quantity"
-  const [cart, setCart] = useState([]);
+  // Diccionario en memoria que guarda el carrito de cada usuario por clave única
+  // Ejemplo: { 'morrison@gmail.com': [...], 'guest': [...] }
+  const [cartsByUser, setCartsByUser] = useState({});
+  const { user } = useUser();
+
+  // Clave activa derivada de la sesión actual (sin estados redundantes ni useEffect)
+  const currentCartKey = user?.email ? user.email.toLowerCase() : 'guest';
+
+  // Carrito activo calculado al vuelo según el usuario logueado
+  const cart = cartsByUser[currentCartKey] || [];
 
   /**
-   * Agrega un producto al carrito.
+   * Agrega un producto al carrito del usuario activo.
    * Si el producto ya existe, incrementa su cantidad en 1 sin duplicar el ítem.
    */
   const addProduct = (product) => {
-    setCart((prevCart) => {
-      const existingProduct = prevCart.find((item) => item.id === product.id);
+    setCartsByUser((prevCarts) => {
+      const currentCart = prevCarts[currentCartKey] || [];
+      const existingProduct = currentCart.find((item) => item.id === product.id);
 
-      if (existingProduct) {
-        return prevCart.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      }
+      const updatedCart = existingProduct
+        ? currentCart.map((item) =>
+            item.id === product.id
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          )
+        : [...currentCart, { ...product, quantity: 1 }];
 
-      return [...prevCart, { ...product, quantity: 1 }];
+      return {
+        ...prevCarts,
+        [currentCartKey]: updatedCart,
+      };
     });
   };
 
   /**
-   * Elimina un producto específico del carrito según su ID.
+   * Elimina un producto específico del carrito del usuario activo según su ID.
    */
   const removeProduct = (productId) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
+    setCartsByUser((prevCarts) => {
+      const currentCart = prevCarts[currentCartKey] || [];
+      return {
+        ...prevCarts,
+        [currentCartKey]: currentCart.filter((item) => item.id !== productId),
+      };
+    });
   };
 
   /**
-   * Vacía todos los productos del carrito.
+   * Vacía todos los productos del carrito del usuario activo.
    */
   const clearCart = () => {
-    setCart([]);
+    setCartsByUser((prevCarts) => ({
+      ...prevCarts,
+      [currentCartKey]: [],
+    }));
   };
 
   /**
    * Incrementa en 1 la cantidad de un producto existente.
    */
   const increaseQuantity = (productId) => {
-    setCart((prevCart) =>
-      prevCart.map((item) =>
-        item.id === productId
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      )
-    );
+    setCartsByUser((prevCarts) => {
+      const currentCart = prevCarts[currentCartKey] || [];
+      return {
+        ...prevCarts,
+        [currentCartKey]: currentCart.map((item) =>
+          item.id === productId
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        ),
+      };
+    });
   };
 
   /**
@@ -68,13 +94,17 @@ export const CartProvider = ({ children }) => {
    * Regla de negocio: nunca permite cantidades menores a 1.
    */
   const decreaseQuantity = (productId) => {
-    setCart((prevCart) =>
-      prevCart.map((item) =>
-        item.id === productId
-          ? { ...item, quantity: item.quantity > 1 ? item.quantity - 1 : 1 }
-          : item
-      )
-    );
+    setCartsByUser((prevCarts) => {
+      const currentCart = prevCarts[currentCartKey] || [];
+      return {
+        ...prevCarts,
+        [currentCartKey]: currentCart.map((item) =>
+          item.id === productId
+            ? { ...item, quantity: item.quantity > 1 ? item.quantity - 1 : 1 }
+            : item
+        ),
+      };
+    });
   };
 
   // Valores calculados dinámicamente (evita estados redundantes)

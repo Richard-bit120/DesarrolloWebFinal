@@ -4,7 +4,6 @@ import {
   Button,
   Chip,
   Container,
-  Grid,
   Paper,
   Stack,
   Typography,
@@ -60,8 +59,18 @@ const Home = () => {
           color: '#ffffff',
         }}
       >
-        <Grid container spacing={3} alignItems="center">
-          <Grid item xs={12} md={8}>
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: {
+              xs: '1fr',
+              md: 'minmax(0, 2fr) minmax(0, 1fr)',
+            },
+            gap: 3,
+            alignItems: 'center',
+          }}
+        >
+          <Box>
             <Typography variant="overline" sx={{ letterSpacing: 1.5, opacity: 0.9 }}>
               {user ? `¡Hola de nuevo, ${user.name}!` : `Bienvenido a ${STORE_INFO.name}`}
             </Typography>
@@ -106,17 +115,12 @@ const Home = () => {
                 </Button>
               )}
             </Stack>
-          </Grid>
+          </Box>
 
-          <Grid
-            item
-            xs={12}
-            md={4}
-            sx={{ display: { xs: 'none', md: 'flex' }, justifyContent: 'center' }}
-          >
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, justifyContent: 'center' }}>
             <StorefrontIcon sx={{ fontSize: 150, opacity: 0.2 }} />
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </Paper>
 
       {/* Barra de navegación rápida por categorías */}
@@ -145,6 +149,7 @@ const Home = () => {
               variant="outlined"
               clickable
               onClick={() => handleSelectCategory('all')}
+              sx={{ minWidth: 95 }}
             />
             {categories.map((category) => (
               <Chip
@@ -153,65 +158,71 @@ const Home = () => {
                 color="primary"
                 clickable
                 onClick={() => handleSelectCategory(category)}
+                sx={{ minWidth: 130 }}
               />
             ))}
           </Stack>
         </Paper>
       )}
 
-      {/* Sección destacada de beneficios */}
-      <Grid container spacing={2.5} sx={{ mb: 5 }}>
-        <Grid item xs={12} md={4}>
-          <Paper
-            elevation={0}
-            sx={{ p: 2.5, height: '100%', border: '1px solid #e2e8f0', borderRadius: 3 }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1 }}>
-              <LocalShippingIcon color="primary" />
-              <Typography variant="subtitle1" fontWeight={600}>
-                Envío sin cargo
-              </Typography>
-            </Box>
-            <Typography variant="body2" color="text.secondary">
-              Entregas rápidas a todo el país sin costos ocultos en todos tus pedidos.
+      {/* Sección destacada de beneficios (3 columnas idénticas) */}
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: {
+            xs: '1fr',
+            md: 'repeat(3, minmax(0, 1fr))',
+          },
+          gap: 2.5,
+          mb: 5,
+          alignItems: 'stretch',
+        }}
+      >
+        <Paper
+          elevation={0}
+          sx={{ p: 2.5, height: '100%', border: '1px solid #e2e8f0', borderRadius: 3 }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1 }}>
+            <LocalShippingIcon color="primary" />
+            <Typography variant="subtitle1" fontWeight={600}>
+              Envío sin cargo
             </Typography>
-          </Paper>
-        </Grid>
+          </Box>
+          <Typography variant="body2" color="text.secondary">
+            Entregas rápidas a todo el país sin costos ocultos en todos tus pedidos.
+          </Typography>
+        </Paper>
 
-        <Grid item xs={12} md={4}>
-          <Paper
-            elevation={0}
-            sx={{ p: 2.5, height: '100%', border: '1px solid #e2e8f0', borderRadius: 3 }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1 }}>
-              <VerifiedUserIcon color="primary" />
-              <Typography variant="subtitle1" fontWeight={600}>
-                Calidad garantizada
-              </Typography>
-            </Box>
-            <Typography variant="body2" color="text.secondary">
-              Productos seleccionados con garantía oficial y devolución simplificada.
+        <Paper
+          elevation={0}
+          sx={{ p: 2.5, height: '100%', border: '1px solid #e2e8f0', borderRadius: 3 }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1 }}>
+            <VerifiedUserIcon color="primary" />
+            <Typography variant="subtitle1" fontWeight={600}>
+              Calidad garantizada
             </Typography>
-          </Paper>
-        </Grid>
+          </Box>
+          <Typography variant="body2" color="text.secondary">
+            Productos seleccionados con garantía oficial y devolución simplificada.
+          </Typography>
+        </Paper>
 
-        <Grid item xs={12} md={4}>
-          <Paper
-            elevation={0}
-            sx={{ p: 2.5, height: '100%', border: '1px solid #e2e8f0', borderRadius: 3 }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1 }}>
-              <SupportAgentIcon color="primary" />
-              <Typography variant="subtitle1" fontWeight={600}>
-                Atención personalizada
-              </Typography>
-            </Box>
-            <Typography variant="body2" color="text.secondary">
-              ¿Tienes dudas? Escríbenos desde nuestra sección de contacto y te asesoramos.
+        <Paper
+          elevation={0}
+          sx={{ p: 2.5, height: '100%', border: '1px solid #e2e8f0', borderRadius: 3 }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1 }}>
+            <SupportAgentIcon color="primary" />
+            <Typography variant="subtitle1" fontWeight={600}>
+              Atención personalizada
             </Typography>
-          </Paper>
-        </Grid>
-      </Grid>
+          </Box>
+          <Typography variant="body2" color="text.secondary">
+            ¿Tienes dudas? Escríbenos desde nuestra sección de contacto y te asesoramos.
+          </Typography>
+        </Paper>
+      </Box>
 
       {/* Sección de 8 productos aleatorios */}
       <Box

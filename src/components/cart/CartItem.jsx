@@ -2,7 +2,6 @@ import {
   Box,
   Card,
   CardContent,
-  Grid,
   IconButton,
   Typography,
 } from '@mui/material';
@@ -19,47 +18,71 @@ const CartItem = ({ item }) => {
   return (
     <Card sx={{ mb: 2 }}>
       <CardContent>
-        <Grid container spacing={2} alignItems="center">
-          {/* Imagen del producto */}
-          <Grid item xs={3} sm={2}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
+            alignItems: { xs: 'stretch', sm: 'center' },
+            gap: 2,
+          }}
+        >
+          {/* Bloque izquierdo: Imagen + Nombre y precio unitario (absorbe el espacio sobrante) */}
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2,
+              flex: 1,
+              minWidth: 0,
+            }}
+          >
             <Box
               component="img"
               src={item.image}
               alt={item.title}
               sx={{
-                width: '100%',
+                width: 75,
                 height: 75,
                 objectFit: 'contain',
                 bgcolor: '#ffffff',
                 borderRadius: 1,
                 p: 0.5,
+                flexShrink: 0,
               }}
             />
-          </Grid>
 
-          {/* Nombre y precio unitario */}
-          <Grid item xs={9} sm={4}>
-            <Typography
-              component={RouterLink}
-              to={`/producto/${item.id}`}
-              variant="subtitle1"
-              sx={{
-                fontWeight: 600,
-                color: 'text.primary',
-                textDecoration: 'none',
-                display: 'block',
-                '&:hover': { color: 'primary.main' },
-              }}
-            >
-              {item.title}
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-              Precio unitario: ${Number(item.price).toFixed(2)}
-            </Typography>
-          </Grid>
+            <Box sx={{ minWidth: 0 }}>
+              <Typography
+                component={RouterLink}
+                to={`/producto/${item.id}`}
+                variant="subtitle1"
+                sx={{
+                  fontWeight: 600,
+                  color: 'text.primary',
+                  textDecoration: 'none',
+                  display: 'block',
+                  '&:hover': { color: 'primary.main' },
+                }}
+              >
+                {item.title}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                Precio unitario: ${Number(item.price).toFixed(2)}
+              </Typography>
+            </Box>
+          </Box>
 
-          {/* Controles de cantidad */}
-          <Grid item xs={6} sm={3}>
+          {/* Bloque derecho: Controles de cantidad + Subtotal + Botón eliminar */}
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: { xs: 'space-between', sm: 'flex-end' },
+              gap: { xs: 2, sm: 3 },
+              flexShrink: 0,
+            }}
+          >
+            {/* Controles de cantidad */}
             <Box
               sx={{
                 display: 'inline-flex',
@@ -89,38 +112,35 @@ const CartItem = ({ item }) => {
                 <AddIcon fontSize="small" />
               </IconButton>
             </Box>
-          </Grid>
 
-          {/* Subtotal y botón eliminar */}
-          <Grid
-            item
-            xs={6}
-            sm={3}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              gap: 1,
-            }}
-          >
-            <Box sx={{ textAlign: 'right' }}>
-              <Typography variant="caption" color="text.secondary" display="block">
-                Subtotal
-              </Typography>
-              <Typography variant="subtitle1" color="primary.main" sx={{ fontWeight: 700 }}>
-                ${subtotal.toFixed(2)}
-              </Typography>
-            </Box>
-
-            <IconButton
-              color="error"
-              onClick={() => removeProduct(item.id)}
-              aria-label={`Eliminar ${item.title}`}
+            {/* Subtotal y botón eliminar */}
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+                gap: 1.5,
+              }}
             >
-              <DeleteOutlineIcon />
-            </IconButton>
-          </Grid>
-        </Grid>
+              <Box sx={{ textAlign: 'right', minWidth: { sm: 90 } }}>
+                <Typography variant="caption" color="text.secondary" display="block">
+                  Subtotal
+                </Typography>
+                <Typography variant="subtitle1" color="primary.main" sx={{ fontWeight: 700 }}>
+                  ${subtotal.toFixed(2)}
+                </Typography>
+              </Box>
+
+              <IconButton
+                color="error"
+                onClick={() => removeProduct(item.id)}
+                aria-label={`Eliminar ${item.title}`}
+              >
+                <DeleteOutlineIcon />
+              </IconButton>
+            </Box>
+          </Box>
+        </Box>
       </CardContent>
     </Card>
   );

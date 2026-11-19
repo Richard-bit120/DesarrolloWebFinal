@@ -6,7 +6,6 @@ import {
   Chip,
   Container,
   Divider,
-  Grid,
   Paper,
   Rating,
   Stack,
@@ -107,36 +106,44 @@ const ProductDetail = () => {
           borderRadius: 4,
         }}
       >
-        <Grid container spacing={5} alignItems="center">
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: {
+              xs: '1fr',
+              md: 'minmax(0, 5fr) minmax(0, 7fr)',
+            },
+            gap: 5,
+            alignItems: 'center',
+          }}
+        >
           {/* Columna izquierda: Imagen grande */}
-          <Grid item xs={12} md={5}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              bgcolor: '#ffffff',
+              borderRadius: 3,
+              p: 3,
+              border: '1px solid #f1f5f9',
+              minHeight: 340,
+            }}
+          >
             <Box
+              component="img"
+              src={product.image}
+              alt={product.title}
               sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                bgcolor: '#ffffff',
-                borderRadius: 3,
-                p: 3,
-                border: '1px solid #f1f5f9',
-                minHeight: 340,
+                maxWidth: '100%',
+                maxHeight: 320,
+                objectFit: 'contain',
               }}
-            >
-              <Box
-                component="img"
-                src={product.image}
-                alt={product.title}
-                sx={{
-                  maxWidth: '100%',
-                  maxHeight: 320,
-                  objectFit: 'contain',
-                }}
-              />
-            </Box>
-          </Grid>
+            />
+          </Box>
 
           {/* Columna derecha: Información y compra */}
-          <Grid item xs={12} md={7}>
+          <Box>
             <Chip
               label={CATEGORY_LABELS[product.category] || product.category}
               color="secondary"
@@ -224,8 +231,8 @@ const ProductDetail = () => {
                 Ver carrito
               </Button>
             </Stack>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </Paper>
     </Container>
   );
